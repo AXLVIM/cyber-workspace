@@ -1,6 +1,0 @@
-*.env
-*.key
-*.pem
-*.log
-secrets/
-notes/private/
