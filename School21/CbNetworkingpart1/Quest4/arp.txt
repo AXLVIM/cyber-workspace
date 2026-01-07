@@ -1,0 +1,19 @@
+ARP Request:
+
+Source IP Address: 10.10.10.1
+
+Destination IP Address: 10.10.10.2
+
+Source MAC Address: c4:01:1b:fc:00:00
+
+Destination MAC Address: ff:ff:ff:ff:ff:ff (broadcast)
+
+ARP Reply:
+
+Source IP Address: 10.10.10.2
+
+Destination IP Address: 10.10.10.1
+
+Source MAC Address: c4:02:1c:18:00:00
+
+Destination MAC Address: c4:01:1b:fc:00:00
