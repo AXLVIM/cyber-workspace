@@ -1,0 +1,11 @@
+Task 2: NTP Synchronization
+
+1. Layer 4 Protocol (OSI): 
+   UDP (User Datagram Protocol)
+
+2. Interaction Ports:
+   Source Port: 123
+   Destination Port: 123
+
+3. Transmit Timestamp (from the first NTP packet):
+   Jan  1, 2000 00:03:40.700012582 UTC
