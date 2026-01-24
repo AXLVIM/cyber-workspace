@@ -1,0 +1,6 @@
+Message Type	Source IP	Destination IP
+
+DHCP Discover	0.0.0.0	        255.255.255.255
+DHCP Offer	10.10.10.1	10.10.10.7
+DHCP Request	0.0.0.0	        255.255.255.255
+DHCP ACK	10.10.10.1	10.10.10.7
