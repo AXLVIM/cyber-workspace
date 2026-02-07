@@ -1,0 +1,41 @@
+ETHICAL HACKING TOOLS: TOP 10 (2026 EDITION)
+
+1. NMAP (Network Mapper)
+   - Use: Network discovery, port scanning, and OS fingerprinting.
+   - Skill: Learning to identify what services are running on a target.
+
+2. WIRESHARK
+   - Use: Network protocol analyzer.
+   - Skill: Capturing packets to see plain-text data and troubleshooting traffic.
+
+3. BURP SUITE
+   - Use: Web application security testing.
+   - Skill: Intercepting HTTP/HTTPS requests to find web vulnerabilities.
+
+4. METASPLOIT FRAMEWORK
+   - Use: Exploitation and payload delivery.
+   - Skill: Automating the process of gaining access to vulnerable systems.
+
+5. HASHCAT / JOHN THE RIPPER
+   - Use: Password cracking.
+   - Skill: Understanding how "hashes" work and why long passwords matter.
+
+6. SQLMAP
+   - Use: Automated SQL injection.
+   - Skill: Testing if a database can be leaked through a web form.
+
+7. AIRCRACK-NG
+   - Use: Wireless (Wi-Fi) security auditing.
+   - Skill: Cracking WPA2/WPA3 handshakes.
+
+8. NIKTO
+   - Use: Web server vulnerability scanner.
+   - Skill: Finding outdated software and dangerous files on servers.
+
+9. SOCIAL-ENGINEER TOOLKIT (SET)
+   - Use: Human-centric attacks (Phishing).
+   - Skill: Creating fake login pages to test user awareness.
+
+10. NETCAT (NC)
+    - Use: The "Swiss Army Knife" of TCP/IP.
+    - Skill: Creating reverse shells and manual data transfer.
