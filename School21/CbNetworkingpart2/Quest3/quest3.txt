@@ -1,0 +1,198 @@
+## Task Summary (DNS)
+
+This task is a hands-on DNS lab using **GNS3** and **Wireshark**.
+
+You need to:
+
+1. **Set up a DNS server** on one device  
+   - Configure the DNS service.
+   - Create a DNS record for the domain **`my.site`**.
+   - Use a **loopback interface** on the DNS server and bind the DNS record to its IP address (best practice, independent of physical interfaces).
+
+2. **Configure a client device**
+   - Set the DNS server’s IP address as the client’s DNS resolver.
+
+3. **Verify DNS name resolution**
+   - Start packet capture.
+   - Run `ping my.site` from the client.
+   - Confirm that the domain name successfully resolves to an IP address.
+
+4. **Analyze DNS traffic in Wireshark**
+   - Open the captured `.pcap` file.
+   - Apply the filter `dns`.
+   - Examine DNS request and response packets.
+   - Pay attention to:
+     - Source and destination ports
+     - DNS **query type** and **query class**
+
+5. **Answer the DNS question**
+   - Identify the **type** and **class** of the DNS query seen in Wireshark.
+   - Save the answer in a text file named **`dns`**.
+
+6. **Submit deliverables**
+   Upload three files to the repository:
+   - GNS3 project file
+   - `dns` text file (answer)
+   - `dns.pcap` packet capture file
+
+---
+
+## What Is the Point of This Quest?
+
+The goal of this quest is to help you **understand how DNS actually works in practice**, not just in theory.
+
+Specifically, it teaches you to:
+
+- Understand how **domain names (FQDNs)** are translated into IP addresses.
+- Properly configure a **DNS server** and client.
+- Learn why **loopback interfaces** are commonly used for infrastructure services.
+- Observe real **DNS packets on the wire** instead of treating DNS as a “black box.”
+- Recognize:
+  - DNS query **types** (e.g. A, AAAA)
+  - DNS query **classes** (usually IN)
+  - UDP port usage (53 ↔ ephemeral ports)
+
+In short:  
+👉 This quest builds **practical networking skills** and shows how name resolution works from configuration → packet level → analysis, which is essential for real-world network engineering, troubleshooting, and security work.
+
+DNS Configuration Project Guide — GNS3 with Cisco Routers
+========================================================
+
+1. Setup Topology
+-----------------
+- Use 2 routers in GNS3: R1 (DNS server), R2 (Client).
+- Connect R1’s GigabitEthernet0/0 to R2’s GigabitEthernet0/0.
+- Assign IPs:
+  - R1: 192.168.1.1/24 on g0/0
+  - R2: 192.168.1.2/24 on g0/0
+
+2. Configure Router 1 (DNS Server)
+-----------------------------------
+
+R1> enable
+R1# configure terminal
+R1(config)# interface gigabitEthernet0/0
+R1(config-if)# ip address 192.168.1.1 255.255.255.0
+R1(config-if)# no shutdown
+R1(config-if)# exit
+
+R1(config)# interface loopback0
+R1(config-if)# ip address 10.10.10.10 255.255.255.255
+R1(config-if)# exit
+
+R1(config)# ip dns server
+R1(config)# ip host my.site 10.10.10.10
+R1(config)# end
+
+- Explanation:
+  - Loopback0 interface is used so DNS record points to a stable IP.
+  - ‘ip dns server’ enables DNS service on R1.
+  - ‘ip host’ adds DNS static record.
+
+3. Configure Router 2 (Client)
+------------------------------
+
+R2> enable
+R2# configure terminal
+R2(config)# interface gigabitEthernet0/0
+R2(config-if)# ip address 192.168.1.2 255.255.255.0
+R2(config-if)# no shutdown
+R2(config-if)# exit
+
+R2(config)# ip name-server 192.168.1.1
+R2(config)# ip domain-lookup
+R2(config)# end
+
+- Explanation:
+  - ‘ip name-server’ points R2 to DNS server.
+  - ‘ip domain-lookup’ enables DNS resolution on R2.
+
+4. Verify IP Connectivity
+-------------------------
+
+On R2:
+
+R2# ping 192.168.1.1
+
+- Should reply successfully; if not, check interfaces and cabling.
+
+5. Test DNS Resolution
+----------------------
+
+On R2:
+
+R2# ping my.site
+
+- Expected output:
+  - “Translating 'my.site'...domain server (192.168.1.1) [OK]”
+  - Followed by ping results to 10.10.10.10.
+
+6. Fix Ping Failure to Loopback IP (if needed)
+----------------------------------------------
+
+If ping to 10.10.10.10 fails (success rate 0%), add a static route on R2:
+
+R2# configure terminal
+R2(config)# ip route 10.10.10.10 255.255.255.255 192.168.1.1
+R2(config)# end
+
+- Explanation:
+  - This route tells R2 how to reach the loopback IP through R1.
+
+7. Capture DNS Traffic with Wireshark
+-------------------------------------
+
+- In GNS3, right-click the link between R1 and R2, start capture.
+- On R2, run: `ping my.site`
+- Stop capture after ping finishes.
+- Open the .pcap file in Wireshark.
+- Apply filter: `dns`
+- Observe DNS query and response packets:
+  - Source port: random high port
+  - Destination port: 53 (UDP)
+  - DNS Query Type: A
+  - DNS Query Class: IN
+
+8. What to include in the `dns` text file
+-----------------------------------------
+Type: A
+Class: IN
+
+
+9. Additional Useful GNS3 / Cisco IOS Commands
+----------------------------------------------
+
+- Show interface IPs and status: show ip interface brief
+
+- Show DNS static records on server: show hosts
+
+- Show DNS service status: show running-config | include dns
+
+- Show DNS servers configured on client: show running-config | include name-server
+
+- Check if domain lookup is enabled or disabled: show running-config | include domain
+
+- To remove a DNS server from client (replace IP): no ip name-server [old_ip]
+
+- To troubleshoot routing issues: show ip route
+
+- To clear DNS cache on router: clear hosts
+
+
+10. Summary Notes
+-----------------
+
+- DNS translates human-readable domain names into IP addresses.
+- Loopback interfaces are used for stable DNS records.
+- Static DNS records on Cisco routers can be created with `ip host`.
+- Clients need to point to DNS server IP via `ip name-server`.
+- `ip domain-lookup` must be enabled on clients to resolve domain names.
+- DNS uses UDP port 53 for queries and responses.
+- Routing must exist for clients to reach the IP addresses in DNS responses.
+
+---
+
+That’s your **complete, ordered DNS project guide for GNS3**.
+
+Save this text as `dns_project_guide.txt` and keep it handy for your submission and future reference.
+
