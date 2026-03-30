@@ -1,0 +1,83 @@
+#1. Intro
+The goal of this task is to implement VLAN Tagging using the IEEE 802.1q standard. In a standard setup, computers connected to different physical switches cannot communicate within the same broadcast domain unless a Trunk link is established.
+
+A Trunk port allows a single physical cable to carry traffic for multiple VLANs by "tagging" each frame with a VLAN ID. Without this, you would need a separate physical cable for every single VLAN, which is inefficient and scales poorly.
+
+#2. Summary
+To complete this task, you will:
+
+Deploy Hardware: Use the Cisco 3745 image. Since it's a router image, you must add an Ethernet switch module (like the NM-16ESW) to make it act as a switch.
+
+Define VLANs: Create VLAN 10 and VLAN 20 on both switches.
+
+Assign Access Ports: Map the ports connected to the PCs to their respective VLANs.
+
+Configure the Trunk: Set up the connection between SW1 and SW2 to allow tagged traffic for both VLAN 10 and 20.
+
+IP Addressing: Assign static IPs within the same subnet for PCs in the same VLAN.
+
+#3. Solution
+#Step A: GNS3 Topology Setup
+Place two Cisco 3745 nodes (SW1 and SW2).
+
+Configure Slots: Right-click each node -> Configure -> Slots. Add the NM-16ESW to Slot 1. This turns the router into a 16-port switch.
+
+Connect 4 VPCS (PC1–PC4):
+
+SW1: PC1 (Port f1/1), PC2 (Port f1/2)
+
+SW2: PC3 (Port f1/1), PC4 (Port f1/2)
+
+Trunk Link: Connect SW1 (Port f1/0) to SW2 (Port f1/0).
+
+#Step B: IP Addressing (Labels)
+Place text labels next to your icons in GNS3:
+
+PC1 (VLAN 10): 192.168.10.1 /24
+
+PC3 (VLAN 10): 192.168.10.3 /24
+
+PC2 (VLAN 20): 192.168.20.2 /24
+
+PC4 (VLAN 20): 192.168.20.4 /24
+
+Step C: Switch Configuration (CLI)
+Run these commands on both SW1 and SW2:
+
+#Bash
+
+# Enter configuration mode
+conf t
+
+# Create the VLANs in the database
+vlan 10
+ name Research
+vlan 20
+ name Evidence
+
+# Configure Access Ports (PC1/PC3 on f1/1, PC2/PC4 on f1/2)
+interface fastEthernet 1/1
+ switchport mode access
+ switchport access vlan 10
+ exit
+
+interface fastEthernet 1/1
+ switchport mode access
+ switchport access vlan 20
+ exit
+
+# Configure the Trunk Link (f1/0)
+interface fastEthernet 1/0
+ switchport trunk encapsulation dot1q
+ switchport mode trunk
+ exit
+Step D: PC Configuration
+On the VPCS consoles, set the IPs:
+
+PC1: ip 192.168.10.1 255.255.255.0
+
+PC3: ip 192.168.10.3 255.255.255.0
+(Repeat for PC2 and PC4 using the .20.x subnet)
+
+Final Validation
+To ensure you pass the assignment, run a ping from PC1 to PC3. It should succeed because they are both in VLAN 10. Then try to ping from PC1 to PC2; it should fail, proving your VLAN isolation is working.

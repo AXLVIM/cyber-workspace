@@ -1,0 +1,59 @@
+#1. Intro
+EtherChannel (specifically Link Aggregation) allows us to bundle multiple physical links into a single logical interface. In your previous task, if the cable between f1/0 and f1/0 failed, the whole network died.
+By adding a second cable and configuring EtherChannel, we gain redundancy (if one cable breaks, the other stays up) and increased bandwidth.
+
+#2. Summary
+Physical Layer: Add a second cable between SW1 and SW2 (using f1/3 to f1/3).
+
+Logical Layer: Create a Port-channel interface.
+
+Protocol: We will use PAgP (Cisco proprietary) or LACP (Standard). For this Cisco image, the "On" mode or PAgP is most common.
+
+Trunking: We move the Trunk configuration from the physical ports to the new Port-channel interface.
+
+#3. Solution
+#Step A: GNS3 Topology Update
+Add a Link: Connect SW1 (f1/3) to SW2 (f1/3).
+
+You now have two cables connecting the switches: f1/0 to f1/0 and f1/3 to f1/3.
+###Warning: Fix f1/0 to f1/2. like this: f1/2 to f1/2 and f1/3 to f1/3. Now you're good to go bro
+
+#Step B: Switch Configuration (SW1 and SW2)
+You must perform these steps on both switches. It is critical that the settings match on both sides.
+
+1. Group the interfaces into a Channel:
+
+#Bash
+
+SW1# conf t
+SW1(config)# interface range fastEthernet 1/0 , fastEthernet 1/3
+SW1(config-if-range)# channel-group 1 mode on
+SW1(config-if-range)# exit
+Note: "Mode on" forces the EtherChannel without negotiating. It's the most stable for the 3745 image in GNS3.
+
+2. Configure the Logical "Port-Channel" as a Trunk:
+Now that the two wires are one "team" (Port-channel 1), we apply the Trunk settings to the team, not the individual wires.
+
+#Bash
+
+SW1(config)# interface port-channel 1
+SW1(config-if)# switchport trunk encapsulation dot1q
+SW1(config-if)# switchport mode trunk
+SW1(config-if)# no shutdown
+SW1(config-if)# exit
+Step C: Verification
+Wait about 30 seconds for Spanning Tree to recalculate, then run these commands:
+
+Check EtherChannel Status:
+
+#Bash
+
+SW1# show etherchannel summary
+Look for (P) next to the ports. P means "Bundled in port-channel." If you see (D), the link is down.
+
+Check Trunk Status:
+
+Bash
+
+SW1# show interface trunk
+The "Port" column should now say Po1 instead of Fa1/0.

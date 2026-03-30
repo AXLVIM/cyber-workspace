@@ -1,0 +1,102 @@
+###1. Intro
+In this task, we aren't using switches or PCs. We are using three Routers (R1, R2, R3).
+Routers don't automatically know about networks that aren't physically touched by their own cables.o
+SPF is the "gossip protocol" that lets R1 tell R3: "Hey, I have a secret network over here, here is how you get to it."
+
+###2. Summary
+
+Topology: R1 — R2 — R3 (Serial or FastEthernet links).
+
+Networks:
+ 
+#1.  Link R1-R2: 10.0.12.0/24
+#2.  Link R2-R3: 10.0.23.0/24
+#3.  R1 Loopback (Free subnet): 192.168.1.1/24
+#4.  R3 Loopback (Free subnet): 192.168.3.1/24
+
+Protocol: OSPF Area 0.
+
+###3. Solution
+
+##Step A: The Topology
+
+In GNS3, drag three c3745 routers onto the workspace.
+
+#1. Connect R1 (f0/0) to R2 (f0/0).
+
+#2. Connect R2 (f0/1) to R3 (f0/0).
+
+##Step B: Configure IP Addresses
+We need to give every interface an address.
+
+#On R1:
+
+#Bash
+
+R1# conf t
+R1(config)# interface f0/0
+R1(config-if)# ip address 10.0.12.1 255.255.255.0
+R1(config-if)# no shutdown
+R1(config-if)# exit
+# Create the "free subnet" using a Loopback interface (virtual port)
+R1(config)# interface loopback 0
+R1(config-if)# ip address 192.168.1.1 255.255.255.0
+
+#On R2:
+
+#Bash
+
+R2# conf t
+R2(config)# interface f0/0
+R2(config-if)# ip address 10.0.12.2 255.255.255.0
+R2(config-if)# no shutdown
+R2(config)# interface f0/1
+R2(config-if)# ip address 10.0.23.2 255.255.255.0
+R2(config-if)# no shutdown
+
+#On R3:
+
+#Bash
+
+R3# conf t
+R3(config)# interface f0/0
+R3(config-if)# ip address 10.0.23.3 255.255.255.0
+R3(config-if)# no shutdown
+R3(config-if)# exit
+R3(config)# interface loopback 0
+R3(config-if)# ip address 192.168.3.1 255.255.255.0
+Step C: Configure OSPF
+Now we tell the routers to share their maps. We use a Wildcard Mask (which is the inverse of a subnet mask: 255.255.255.0 becomes 0.0.0.255).
+
+#On R1:
+
+#Bash
+
+R1(config)# router ospf 1
+R1(config-router)# network 10.0.12.0 0.0.0.255 area 0
+R1(config-router)# network 192.168.1.0 0.0.0.255 area 0
+
+#On R2:
+
+#Bash
+
+R2(config)# router ospf 1
+R2(config-router)# network 10.0.12.0 0.0.0.255 area 0
+R2(config-router)# network 10.0.23.0 0.0.0.255 area 0
+
+#On R3:
+
+#Bash
+
+R3(config)# router ospf 1
+R3(config-router)# network 10.0.23.0 0.0.0.255 area 0
+R3(config-router)# network 192.168.3.0 0.0.0.255 area 0
+
+###4. Verification
+
+Check Neighbors: On R2, type show ip ospf neighbor. You should see both R1 and R3 in the list.
+
+Check Routes: On R1, type show ip route. You should see a route marked with "O" for 192.168.3.0.
+
+The Final Test: On R1, try to ping R3's free subnet:
+ping 192.168.3.1
