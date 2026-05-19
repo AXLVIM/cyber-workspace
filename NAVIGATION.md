@@ -1,3 +1,53 @@
+# 📂 Repository Architecture
+
+Below is the macro-level structural blueprint of this monorepo, detailing the specific security domains and infrastructure engineering modules contained within.
+
+### 🎯 CTF/ — Capture The Flag & Wargames
+Interactive security labs focused on privilege escalation and vulnerability exploitation.
+* **overthewire/** — Linux terminal mastery and server-side exploitation.
+  * `bandit/` — Linux privilege escalation, permissions, and bash filters.
+  * `natas/` — Web application security vulnerabilities and server analysis.
+* **Root-Me/** — Real-world network administration and automation capture scenarios.
+
+### 📦 HTB/ — Hack The Box Academy Tracks
+Structured professional training pathways logging practical system penetration testing.
+* **CJCA/** — Certified Junior Cybersecurity Analyst hands-on exercises.
+* **CPTS/** — Certified Penetration Testing Specialist core infrastructure testing blocks.
+
+### 🧠 Obsidian/ — Centralized Security Vault
+A live Markdown knowledge base mapping theory to practical tradecraft, synced directly from my second brain.
+* **Cybersecurity/** — Strategic planning and defensive architectures.
+  * `Blue Team/` — Defensive engineering, log analysis, and infrastructure monitoring.
+  * `Red Team/` — Active Directory (AD) mechanics and operational roadmaps.
+* **Ethical Hacking/** — Hands-on execution frameworks and command syntax sheets.
+  * `Network Enumeration/` — Active footprinting blueprints and raw Nmap syntax.
+  * `Reverse Engineering/` — Netcat socket connections, listeners, and payload mechanics.
+  * `Scripting/` — Multi-tiered automation modules covering advanced Bash arrays and custom python tools.
+* **School21/** — Conceptual study logs and academic project breakdowns.
+
+### 🔍 OSINT/ — Open-Source Intelligence Sandbox
+Environment tracking and validation for public data collection utilities.
+* **sherlock/** — Username footprinting across federated social web networks.
+* **shodan/** — Internet-wide device discovery and perimeter scanning techniques.
+* **theHarvester/** — Target domain gathering, including public email lists and subdomains.
+
+### ⚡ School21/ — Core Engineering Portfolio
+Production infrastructure configurations, custom scripts, and deep packet forensics.
+* **CbS1_Networking_basics_Part_1/** — IPv4 subnets, network topologies, and base GNS3 environment routing.
+* **CbS2_Networking_basics_Part_2/** — Core services implementation (NTP, DNS, DHCP) and static routing paths.
+* **CbS3_Networking_basics_Part_3/** — High-availability gateways (HSRP), dynamic routing protocols (OSPF), and VLAN Trunking (IEEE 802.1q).
+* **CbS4_Networking_basics_Part_4/** — Advanced Wireshark PCAP digital forensics, packet parsing, and custom traffic filters.
+* **CbS5_Linux_basics/** — System hardening, custom cron automation scripts, and iptables stateful firewall rules.
+* **CbS6_Windows_basics/** — Windows security policies and administrative PowerShell (.ps1) scripting.
+* **CbS7_Crypto_intro/** — Cryptographic logic implementations, XOR manipulation, and standalone Python decoder scripts.
+
+### 📜 Repository Assets
+System files managing repo documentation and usage parameters.
+* **LICENSE** — Distribution terms.
+* **NAVIGATION.md** — Clickable file routing index.
+* **README.md** — Primary workspace landing profile.
+
+
 # 🧭 Core Navigation Map
 
 Welcome to my central security workspace. This monorepo serves as my integrated laboratory environment, curriculum tracker, and engineering notebook. 
