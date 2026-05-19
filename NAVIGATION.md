@@ -62,8 +62,9 @@ Environment tracking and validation for public data collection utilities.
 
 ### ⚡ School21/ — Core Engineering Portfolio
 Production infrastructure configurations, custom scripts, and deep packet forensics.
->[!info] Reminder
->All the project files are located in /src folder
+> [!NOTE]
+> **Reminder**
+> All the project files are located in the `/src` folder.
 
 * **CbS1_Networking_basics_Part_1/** — IPv4 subnets, network topologies, and base GNS3 environment routing.
 * **CbS2_Networking_basics_Part_2/** — Core services implementation (NTP, DNS, DHCP) and static routing paths.
