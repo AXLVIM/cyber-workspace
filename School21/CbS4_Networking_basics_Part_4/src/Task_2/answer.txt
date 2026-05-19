@@ -1,0 +1,4 @@
+Reverse Shell Initiator IP: 192.168.1.101
+Reverse Shell Destination IP: 192.168.1.100
+Protocol: TCP
+Commands: id, whoami, uname -a, ls -la, cat /etc/passwd

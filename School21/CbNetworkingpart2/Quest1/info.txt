@@ -1,2 +1,0 @@
-(from R1) ip route R1 netwrok(10.10.10.0) 255.255.255.0 R3 IP Address(10.10.20.3)
-(from R3) ip route R3 netwrok(10.10.20.0) 255.255.255.0 R1 IP Address(10.10.10.1)

@@ -1,0 +1,40 @@
+FLAG:
+S21{w45_17_cryp70_0r_wh47}
+
+SOLUTION STEPS:
+
+1. REVERSE ENGINEERING THE ALGORITHM:
+   The script uses a recursive XOR cipher. It applies a new "layer" of 
+   XOR transformations at every step 'n'. 
+   - Layer 0 XORs indices [0...end]
+   - Layer 1 XORs indices [1...end]
+   - Layer 2 XORs indices [2...end]
+   This means the first character is XORed once, the second twice, 
+   the third three times, and so on.
+
+2. MATH LOGIC (XOR REVERSIBILITY):
+   Since (A ^ B) ^ B = A, the XOR operation is its own inverse. 
+   To decrypt, I simply had to apply the same XOR operations but 
+   in the EXACT REVERSE order of the encryption (from the last 
+   recursive step back to the first).
+
+3. DECRYPTION PROCESS:
+   I wrote a script that loops backwards from n = len(flag)-1 
+   down to 0. Inside this loop, it XORs the characters with the 
+   key 'qwertyuioplkjhgfdsazlfmhkb' using the same offset 
+   logic (i - n) found in the original code.
+
+4. RESULT:
+   Processing the ciphertext "\"4Rj\x12(\\_^(,{\x00c\r,OS]e$j\x18,Dl" 
+   through this reverse loop yields the original flag.
+
+
+## If you wanna check it, there is a scrypt called reverse_encrypt.py. Run it:
+
+python3 reverse_encrypt.py
+
+## Result: 
+S21{w45_17_cryp70_0r_wh47}
+
+## Now repleace the flag in encrypt.py and run the encrypt.py. Yo will see
+'"4Rj\x12(\\_^(,{\x00c\r,OS]e$j\x18,Dl'

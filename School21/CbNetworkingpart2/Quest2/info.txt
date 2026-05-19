@@ -1,5 +1,0 @@
-ntp master
-ntp no master
-clock set 00:00:00 Jan 4 2026
-ntp server IP address (10.10.10.1) <-- example
-ntp no server IP address (10.10.10.1) <-- example
