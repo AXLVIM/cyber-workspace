@@ -1,5 +1,0 @@
-# This directory is a Syncthing folder marker.
-# Do not delete.
-
-folderID: ovsn3-wahdh
-created: 2026-05-16T14:59:48+05:00
